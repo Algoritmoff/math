@@ -2,21 +2,27 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
-from random import *
+from random import randint
+from time import time
 
 def show_tripple_plus_minus():
+    main_window.start_time = time()
     tripple_plus_minus()
     choice_screen.hide()
     example_screen_1.show()
     line_answer_1.setFocus()
 
 def show_double_mult_1_11():
+    main_window.start_time = time()
     double_mult_1_11()
     choice_screen.hide()
     example_screen_2.show()
     line_answer_2.setFocus()
 
 def tripple_plus_minus():
+    main_window.end_time = round(time() - main_window.start_time)
+    ex_time_1.setText(str(main_window.end_time))
+    main_window.start_time = time()
     if line_answer_1.text() == str(main_window.total):
         main_window.score += 1
     else:
@@ -56,8 +62,12 @@ app = QApplication([])
 
 main_window = QWidget()
 main_window.setWindowTitle('Матеша 2.0')
-# main_window.resize(300, 100)
+main_window.resize(300, 100)
 main_window.move(700, 400)
+main_window.total = 0
+main_window.score = 1
+main_window.start_time = 0
+main_window.end_time = 0
 
 font16 = QtGui.QFont()
 font16.setPointSize(16)
@@ -94,10 +104,10 @@ lb_score_text_1 = QLabel('Счёт: ')
 lb_score_text_1.setFont(font16)
 lb_score_1 = QLabel()
 lb_score_1.setFont(font16)
-lb_view_1 = QLabel('Вид примеров: ')
-lb_view_1.setFont(font16)
-ex_view_1 = QLabel('3-х ЗН +- 3-х ЗН')
-ex_view_1.setFont(font16)
+lb_time_1 = QLabel('Время: ')
+lb_time_1.setFont(font16)
+ex_time_1 = QLabel(str(main_window.end_time))
+ex_time_1.setFont(font16)
 lb_example_1 = QLabel()
 lb_example_1.setFont(font24)
 line_answer_1 = QLineEdit()
@@ -129,9 +139,9 @@ row_1_1.addWidget(lb_score_text_1)
 row_1_1.addWidget(lb_score_1)
 main_layout_1.addLayout(row_1_1)
 row_2_1 = QHBoxLayout()
-row_2_1.addWidget(lb_view_1)
-row_2_1.addWidget(ex_view_1)
-main_layout_1.addLayout(row_1_1)
+row_2_1.addWidget(lb_time_1)
+row_2_1.addWidget(ex_time_1)
+main_layout_1.addLayout(row_2_1)
 row_3_1 = QHBoxLayout()
 row_3_1.addWidget(lb_example_1,1)
 row_3_1.addWidget(line_answer_1,7)
@@ -165,8 +175,6 @@ main_window.show()
 example_screen_1.hide()
 example_screen_2.hide()
 
-main_window.total = 0
-main_window.score = 1
 btn_view_1.clicked.connect(show_tripple_plus_minus)
 btn_view_2.clicked.connect(show_double_mult_1_11)
 btn_answer_1.clicked.connect(tripple_plus_minus)
